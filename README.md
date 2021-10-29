@@ -41,4 +41,14 @@ server{
 }
 
 ```
+7. 后端代理
+```
+location /OneBlog/ {
+        proxy_set_header Host $host;
+        proxy_set_header x-real-ip $remote_addr;
+        proxy_set_header X-Real-Port $remote_port;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://localhost:8087/OneBlog/;
+}
+```
 
