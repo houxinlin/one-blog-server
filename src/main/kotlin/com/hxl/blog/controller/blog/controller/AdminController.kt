@@ -66,7 +66,11 @@ class AdminController {
 
     @GetMapping("getBrowseRecord")
     fun getBrowseRecord(@RequestParam(required = false, value = "page") page: Int): Any {
-        return ResultUtils.success(ipService.page(Page(page.toLong(), 50)), 0)
+        return ResultUtils.success(
+            ipService.page(
+                Page(page.toLong(), 50),
+                QueryWrapper<TbIp?>().orderByDesc("id")), 0
+        )
     }
 
     @GetMapping("getSysConfig")
