@@ -14,9 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 class WebConfig : WebMvcConfigurer {
 
     override fun extendMessageConverters(converters: MutableList<HttpMessageConverter<*>>) {
-        for (converter in converters) {
-            println(converter)
-        }
+
     }
 
     override fun addInterceptors(registry: InterceptorRegistry) {

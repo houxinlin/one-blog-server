@@ -45,7 +45,7 @@ class AdminController {
 
     @PostMapping("add")
     fun add(@RequestBody body: TbBlog): Any {
-        if (body.id != 0) {
+        if (body.id != null) {
             return ResultUtils.success(blogService.updateById(body), 0)
         }
         with(body) {
