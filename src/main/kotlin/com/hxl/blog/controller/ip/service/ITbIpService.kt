@@ -20,5 +20,5 @@ import org.springframework.web.bind.annotation.RequestMapping
  * @since 2021-10-27
  */
 interface ITbIpService : IService<TbIp?> {
-    fun add(ip: String)
+    fun addIpRecord(ip: String?)
 }

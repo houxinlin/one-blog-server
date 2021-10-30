@@ -13,15 +13,10 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer
 @Configuration
 class WebConfig : WebMvcConfigurer {
 
-    override fun extendMessageConverters(converters: MutableList<HttpMessageConverter<*>>) {
-
-    }
-
     override fun addInterceptors(registry: InterceptorRegistry) {
         super.addInterceptors(registry)
         registry.addInterceptor(AuthInterceptor())
             .addPathPatterns("/api/admin/**")
             .excludePathPatterns("/api/admin/login")
-
     }
 }

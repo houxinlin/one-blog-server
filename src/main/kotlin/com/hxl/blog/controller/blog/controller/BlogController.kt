@@ -6,7 +6,6 @@ import com.hxl.blog.config.MybatisConfig
 import com.hxl.blog.controller.blog.entity.TbBlog
 import com.hxl.blog.controller.blog.service.ITbBlogService
 import com.hxl.blog.controller.ip.service.ITbIpService
-import com.hxl.blog.utils.IpUtils
 import com.hxl.blog.utils.ResultUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
@@ -44,10 +43,7 @@ class BlogController {
         @RequestParam("page") page: Int,
         @RequestParam(value = "type", defaultValue = "") type: String, request: HttpServletRequest
     ): Any {
-        var ip = request.getHeader("x-real-ip")
-        ip?.let {
-            ipService.add(it)
-        }
+        ipService.addIpRecord(request.getHeader("x-real-ip"))
         var queryWrapper = QueryWrapper<TbBlog>()
             .orderByDesc("id");
         if ("" != type) {

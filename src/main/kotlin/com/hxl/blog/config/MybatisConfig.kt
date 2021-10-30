@@ -12,9 +12,6 @@ class MybatisConfig {
     companion object {
         const val PAGE_MAX_SIZE: Long = 10;
     }
-    init{
-    }
-
     @Bean
     fun mybatisPlusInterceptor(): MybatisPlusInterceptor? {
         val interceptor = MybatisPlusInterceptor()
