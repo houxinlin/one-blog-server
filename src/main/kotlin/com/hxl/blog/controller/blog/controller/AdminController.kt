@@ -18,6 +18,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
 import javax.servlet.http.HttpServletRequest
+import javax.servlet.http.HttpServletResponse
 import javax.servlet.http.HttpSession
 
 @RequestMapping("/api/admin")
@@ -36,8 +37,10 @@ class AdminController {
     lateinit var ipService: ITbIpService;
 
     @PostMapping("login")
-    fun login(@RequestBody vo: LoginVO, session: HttpSession): Any {
+    fun login(@RequestBody vo: LoginVO, session: HttpSession,response:HttpServletResponse): Any {
         var result = sysConfig.login(vo)
+        var id = session.id
+        response.setHeader("Set-Cookie","JSESSIONID=${id};SameSite=None;Secure")
         session.setAttribute("login", result)
         return ResultUtils.success(result, 0)
     }
