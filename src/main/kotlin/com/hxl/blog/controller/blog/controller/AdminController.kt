@@ -40,6 +40,7 @@ class AdminController {
     fun login(@RequestBody vo: LoginVO, session: HttpSession,response:HttpServletResponse): Any {
         var result = sysConfig.login(vo)
         var id = session.id
+        //跨越的话如果不加SameSite=None;Secure，Cookie会无法设置
         response.setHeader("Set-Cookie","JSESSIONID=${id};SameSite=None;Secure")
         session.setAttribute("login", result)
         return ResultUtils.success(result, 0)

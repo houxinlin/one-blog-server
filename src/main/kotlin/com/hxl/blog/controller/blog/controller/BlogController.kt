@@ -1,6 +1,7 @@
 package com.hxl.blog.controller.blog.controller
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper
+import com.baomidou.mybatisplus.core.metadata.TableFieldInfo
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO
 import com.hxl.blog.config.MybatisConfig
 import com.hxl.blog.controller.blog.entity.TbBlog
@@ -10,6 +11,7 @@ import com.hxl.blog.utils.ResultUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
+import java.util.function.Predicate
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -46,9 +48,15 @@ class BlogController {
         ipService.addIpRecord(request.getHeader("x-real-ip"))
         var queryWrapper = QueryWrapper<TbBlog>()
             .orderByDesc("id");
+
         if ("" != type) {
             queryWrapper.eq("classify_id", type)
         }
+        queryWrapper.select(TbBlog::class.java,object :Predicate<TableFieldInfo>{
+            override fun test(t: TableFieldInfo): Boolean {
+                return t.column!="markdown_content"
+            }
+        })
         var list = blogService.page(PageDTO(page.toLong(), MybatisConfig.PAGE_MAX_SIZE), queryWrapper)
         return ResultUtils.success(list, 0)
     }
