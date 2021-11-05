@@ -2,18 +2,20 @@
 CREATE DATABASE db_blog;
 
 USE db_blog;
+-- db_blog.tb_blog definition
+
 CREATE TABLE `tb_blog` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `blog_title` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '标题',
+  `id` int NOT NULL AUTO_INCREMENT,
+  `blog_title` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '标题',
   `markdown_content` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT 'md内容',
   `create_date` datetime NOT NULL COMMENT '时间',
-  `classify_id` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL,
-  `watch_count` int(11) DEFAULT '1' COMMENT '浏览总数',
-  `blog_describe` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '描述信息',
+  `classify_id` varchar(100) NOT NULL,
+  `watch_count` int DEFAULT '1' COMMENT '浏览总数',
+  `blog_describe` varchar(400) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci NOT NULL COMMENT '描述信息',
   `tags` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT '' COMMENT 'tags',
   PRIMARY KEY (`id`),
-  KEY `tb_blog_FK` (`classify_id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=170 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `tb_blog_FK` (`classify_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=182 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 
 -- db_blog.tb_classify definition
