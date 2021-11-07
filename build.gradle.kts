@@ -51,5 +51,5 @@ tasks.withType<Test> {
     useJUnitPlatform()
 }
 tasks.bootWar{
-    archiveFileName.set("OneBlog.war")
+    archiveFileName.set("OneBlogServer.war")
 }
