@@ -37,11 +37,11 @@ class AdminController {
     lateinit var ipService: ITbIpService;
 
     @PostMapping("login")
-    fun login(@RequestBody vo: LoginVO, session: HttpSession,response:HttpServletResponse): Any {
+    fun login(@RequestBody vo: LoginVO, session: HttpSession, response: HttpServletResponse): Any {
         var result = sysConfig.login(vo)
         var id = session.id
         //跨越的话如果不加SameSite=None;Secure，Cookie会无法设置
-        response.setHeader("Set-Cookie","JSESSIONID=${id};SameSite=None;Secure")
+        response.setHeader("Set-Cookie", "JSESSIONID=${id};SameSite=None;Secure")
         session.setAttribute("login", result)
         return ResultUtils.success(result, 0)
     }
@@ -49,9 +49,21 @@ class AdminController {
 
     @PostMapping("add")
     fun add(@RequestBody body: TbBlog): Any {
+        /**
+         * 如果id不为空，可能是更新博客
+         */
         if (body.id != null) {
+            var oldBlog = blogService.getById(body)
+            oldBlog?.let {
+                with(body) {
+                    watchCount = oldBlog.watchCount
+                }
+            }
             return ResultUtils.success(blogService.updateById(body), 0)
         }
+        /**
+         * 新增
+         */
         with(body) {
             createDate = LocalDateTime.now()
             watchCount = 1
@@ -73,7 +85,8 @@ class AdminController {
         return ResultUtils.success(
             ipService.page(
                 Page(page.toLong(), 50),
-                QueryWrapper<TbIp?>().orderByDesc("id")), 0
+                QueryWrapper<TbIp?>().orderByDesc("id")
+            ), 0
         )
     }
 
