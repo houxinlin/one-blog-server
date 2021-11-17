@@ -71,6 +71,9 @@ class AdminController {
         return ResultUtils.success(blogService.save(body), 0)
     }
 
+    /**
+     * 删除文章
+     */
     @PostMapping("deleteArticle")
     fun deleteArticle(@RequestBody body: Map<String, Any>): Any {
         if (body.containsKey("id")) {
@@ -80,6 +83,9 @@ class AdminController {
         return ResultUtils.success("OK", 0)
     }
 
+    /**
+     * 获取浏览记录
+     */
     @GetMapping("getBrowseRecord")
     fun getBrowseRecord(@RequestParam(required = false, value = "page") page: Int): Any {
         return ResultUtils.success(
@@ -90,11 +96,17 @@ class AdminController {
         )
     }
 
+    /**
+     * 获取系统值
+     */
     @GetMapping("getSysConfig")
     fun getSysConfig(): Any {
         return ResultUtils.success(sysConfig.list(), 0)
     }
 
+    /**
+     * 设置系统值
+     */
     @PostMapping("setSysConfig")
     fun setSysConfig(@RequestBody map: Map<String, Any>): Any {
         map.forEach { (k, v) ->
@@ -107,6 +119,9 @@ class AdminController {
         return ResultUtils.success("OK", 0)
     }
 
+    /**
+     * 分析
+     */
     @GetMapping("dashboard")
     fun dashboard(): Any {
         return ResultUtils.success(
@@ -123,11 +138,17 @@ class AdminController {
         )
     }
 
+    /**
+     * 添加文章分类
+     */
     @PostMapping("addClassify")
     fun addClassify(@RequestBody classify: TbClassify): Any {
         return ResultUtils.success(classifyService.save(classify), 0);
     }
 
+    /**
+     * 删除文章
+     */
     @PostMapping("removeClassify")
     fun removeClassify(@RequestBody classify: TbClassify): Any {
         return ResultUtils.success(
