@@ -45,19 +45,12 @@ class BlogController {
         @RequestParam("page") page: Int,
         @RequestParam(value = "type", defaultValue = "") type: String, request: HttpServletRequest
     ): Any {
-        ipService.addIpRecord(request.getHeader("x-real-ip"))
-        var queryWrapper = QueryWrapper<TbBlog>()
-            .orderByDesc("id");
+        request.getHeader("x-real-ip")?.run { ipService.addIpRecord(this)}
+        val queryWrapper = QueryWrapper<TbBlog>().orderByDesc("id");
 
-        if ("" != type) {
-            queryWrapper.eq("classify_id", type)
-        }
-        queryWrapper.select(TbBlog::class.java,object :Predicate<TableFieldInfo>{
-            override fun test(t: TableFieldInfo): Boolean {
-                return t.column!="markdown_content"
-            }
-        })
-        var list = blogService.page(PageDTO(page.toLong(), MybatisConfig.PAGE_MAX_SIZE), queryWrapper)
+        if ("" != type) queryWrapper.eq("classify_id", type)
+        queryWrapper.select(TbBlog::class.java) { t -> t.column != "markdown_content" }
+        val list = blogService.page(PageDTO(page.toLong(), MybatisConfig.PAGE_MAX_SIZE), queryWrapper)
         return ResultUtils.success(list, 0)
     }
 
@@ -66,10 +59,7 @@ class BlogController {
      */
     @GetMapping("listDiary")
     fun list(): Any {
-        var list = blogService.list(
-            QueryWrapper<TbBlog>()
-                .eq("classify_id", "日记")
-        )
+        val  list = blogService.list(QueryWrapper<TbBlog>().eq("classify_id", "日记"))
         return ResultUtils.success(list, 0)
     }
 
@@ -78,7 +68,7 @@ class BlogController {
      */
     @GetMapping("detail")
     fun detail(@RequestParam("id") id: Int): Any {
-        var blog = blogService.getById(id)
+        val  blog = blogService.getById(id)
         blog?.let {
             it.watchCount = it.watchCount + 1
             blogService.updateById(blog)
