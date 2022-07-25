@@ -63,7 +63,7 @@ class TbBlog : Serializable {
     /**
      * tags
      */
-    @Field(fielddata = true, type = FieldType.Text)
+
     var tags: String? = null
     override fun toString(): String {
         return "TbBlog{" +

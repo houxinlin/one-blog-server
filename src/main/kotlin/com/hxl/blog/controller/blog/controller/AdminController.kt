@@ -11,13 +11,14 @@ import com.hxl.blog.controller.ip.entity.TbIp
 import com.hxl.blog.controller.ip.service.ITbIpService
 import com.hxl.blog.controller.sys.entity.TbSysConfig
 import com.hxl.blog.controller.sys.service.ITbSysConfigService
+import com.hxl.blog.es.EsBlogRepository
 import com.hxl.blog.utils.BuilderMap
 import com.hxl.blog.utils.ResultUtils
 import com.hxl.blog.vo.LoginVO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
-import javax.servlet.http.HttpServletRequest
+import javax.annotation.Resource
 import javax.servlet.http.HttpServletResponse
 import javax.servlet.http.HttpSession
 
@@ -32,14 +33,15 @@ class AdminController {
 
     @Autowired
     lateinit var classifyService: ITbClassifyService;
-
+    @Resource
+    lateinit var esBlogRepository: EsBlogRepository
     @Autowired
     lateinit var ipService: ITbIpService;
 
     @PostMapping("login")
     fun login(@RequestBody vo: LoginVO, session: HttpSession, response: HttpServletResponse): Any {
-        var result = sysConfig.login(vo)
-        var id = session.id
+        val  result = sysConfig.login(vo)
+        val id = session.id
         //跨越的话如果不加SameSite=None;Secure，Cookie会无法设置
         response.setHeader("Set-Cookie", "JSESSIONID=${id};SameSite=None;Secure")
         session.setAttribute("login", result)
@@ -53,12 +55,8 @@ class AdminController {
          * 如果id不为空，可能是更新博客
          */
         if (body.id != null) {
-            var oldBlog = blogService.getById(body)
-            oldBlog?.let {
-                with(body) {
-                    watchCount = oldBlog.watchCount
-                }
-            }
+            val oldBlog = blogService.getById(body)
+            oldBlog?.let { with(body) { watchCount = oldBlog.watchCount } }
             return ResultUtils.success(blogService.updateById(body), 0)
         }
         /**
@@ -68,6 +66,8 @@ class AdminController {
             createDate = LocalDateTime.now()
             watchCount = 1
         }
+        esBlogRepository.save(body)
+
         return ResultUtils.success(blogService.save(body), 0)
     }
 
@@ -77,7 +77,7 @@ class AdminController {
     @PostMapping("deleteArticle")
     fun deleteArticle(@RequestBody body: Map<String, Any>): Any {
         if (body.containsKey("id")) {
-            var id = body.get("id") as Int
+            val id = body["id"] as Int
             blogService.removeById(id)
         }
         return ResultUtils.success("OK", 0)
