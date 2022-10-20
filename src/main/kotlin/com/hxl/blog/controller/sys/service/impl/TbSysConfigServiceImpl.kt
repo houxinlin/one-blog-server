@@ -28,7 +28,7 @@ class TbSysConfigServiceImpl : ServiceImpl<TbSysConfigMapper?, TbSysConfig?>(), 
     lateinit var sysConfigDao: TbSysConfigMapper;
 
     override fun login(loginVO: LoginVO): Any {
-        var sysConfig = selectKey(SysKeyEnum.SYS_LOGIN_PASSWD.value)
+        val sysConfig = selectKey(SysKeyEnum.SYS_LOGIN_PASSWD.value)
         return sysConfig?.sysValue.equals(loginVO.passwd);
     }
 

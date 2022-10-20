@@ -4,14 +4,17 @@ import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper
 import com.baomidou.mybatisplus.core.metadata.TableFieldInfo
 import com.baomidou.mybatisplus.extension.plugins.pagination.PageDTO
 import com.hxl.blog.config.MybatisConfig
+import com.hxl.blog.config.SysKeyEnum
 import com.hxl.blog.controller.blog.entity.TbBlog
 import com.hxl.blog.controller.blog.service.ITbBlogService
 import com.hxl.blog.controller.ip.service.ITbIpService
+import com.hxl.blog.controller.sys.service.ITbSysConfigService
 import com.hxl.blog.utils.ResultUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
 import java.time.LocalDateTime
 import java.util.function.Predicate
+import java.util.stream.Collectors
 import javax.servlet.http.HttpServletRequest
 
 /**
@@ -31,7 +34,8 @@ class BlogController {
 
     @Autowired
     lateinit var ipService: ITbIpService;
-
+    @Autowired
+    lateinit var sysConfig: ITbSysConfigService;
     @GetMapping("getContent")
     fun getContent(@RequestParam("id") blogId: Int): Any {
         return LocalDateTime.now()
@@ -75,6 +79,11 @@ class BlogController {
         }
         return ResultUtils.success(blog, 0);
     }
-
+    @GetMapping("getConfigs")
+    fun getConfigs():MutableMap<String,String>{
+        return sysConfig.list().filterNot { it!!.sysKey== SysKeyEnum.SYS_LOGIN_PASSWD.value }
+            .stream()
+            .collect(Collectors.toMap({it!!.sysKey},{it!!.sysValue}))
+    }
 
 }

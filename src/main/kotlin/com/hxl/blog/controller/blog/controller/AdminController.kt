@@ -3,6 +3,8 @@ package com.hxl.blog.controller.blog.controller
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page
+import com.hxl.blog.config.SysKeyEnum
+import com.hxl.blog.config.WebConfig
 import com.hxl.blog.controller.blog.entity.TbBlog
 import com.hxl.blog.controller.blog.service.ITbBlogService
 import com.hxl.blog.controller.classify.entity.TbClassify
@@ -16,7 +18,10 @@ import com.hxl.blog.utils.ResultUtils
 import com.hxl.blog.vo.LoginVO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
+import org.springframework.web.multipart.MultipartFile
+import java.nio.file.Paths
 import java.time.LocalDateTime
+import java.util.stream.Collectors
 import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import javax.servlet.http.HttpSession
@@ -38,8 +43,8 @@ class AdminController {
 
     @PostMapping("login")
     fun login(@RequestBody vo: LoginVO, session: HttpSession, response: HttpServletResponse): Any {
-        var result = sysConfig.login(vo)
-        var id = session.id
+        val result = sysConfig.login(vo)
+        val id = session.id
         //跨越的话如果不加SameSite=None;Secure，Cookie会无法设置
         response.setHeader("Set-Cookie", "JSESSIONID=${id};SameSite=None;Secure")
         session.setAttribute("login", result)
@@ -117,6 +122,21 @@ class AdminController {
             )
         }
         return ResultUtils.success("OK", 0)
+    }
+    @PostMapping("restPassword")
+    fun restPassword(@RequestBody vo: LoginVO):String{
+        if (vo.passwd.length<6) return "密码最少6位"
+        sysConfig.update(UpdateWrapper<TbSysConfig>().set("sys_value", vo.passwd).eq("sys_key", SysKeyEnum.SYS_LOGIN_PASSWD))
+        return "重置成功"
+    }
+
+    @PostMapping("configInfo")
+    fun configInfo(@RequestParam(value = "img", required = false) multipartFile: MultipartFile?,
+                   @RequestParam(value = "title" )title:String):String{
+        if (title.isEmpty()) return "无效网名"
+        sysConfig.update(UpdateWrapper<TbSysConfig>().set("sys_value", title).eq("sys_key", SysKeyEnum.SYS_BLOG_TITLE))
+        multipartFile?.transferTo(Paths.get(WebConfig.STATIC_PATH,"av"))
+        return "保存成功"
     }
 
     /**
