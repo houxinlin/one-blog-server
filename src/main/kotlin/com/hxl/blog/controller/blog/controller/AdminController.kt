@@ -13,6 +13,7 @@ import com.hxl.blog.controller.ip.entity.TbIp
 import com.hxl.blog.controller.ip.service.ITbIpService
 import com.hxl.blog.controller.sys.entity.TbSysConfig
 import com.hxl.blog.controller.sys.service.ITbSysConfigService
+import com.hxl.blog.es.EsBlogRepository
 import com.hxl.blog.utils.BuilderMap
 import com.hxl.blog.utils.ResultUtils
 import com.hxl.blog.vo.LoginVO
@@ -21,8 +22,6 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import java.nio.file.Paths
 import java.time.LocalDateTime
-import java.util.stream.Collectors
-import javax.servlet.http.HttpServletRequest
 import javax.servlet.http.HttpServletResponse
 import javax.servlet.http.HttpSession
 
@@ -36,8 +35,7 @@ class AdminController {
     lateinit var blogService: ITbBlogService;
 
     @Autowired
-    lateinit var classifyService: ITbClassifyService;
-
+    lateinit var classifyService: ITbClassifyService
     @Autowired
     lateinit var ipService: ITbIpService;
 
@@ -58,12 +56,8 @@ class AdminController {
          * 如果id不为空，可能是更新博客
          */
         if (body.id != null) {
-            var oldBlog = blogService.getById(body)
-            oldBlog?.let {
-                with(body) {
-                    watchCount = oldBlog.watchCount
-                }
-            }
+            val oldBlog = blogService.getById(body)
+            oldBlog?.let { with(body) { watchCount = oldBlog.watchCount } }
             return ResultUtils.success(blogService.updateById(body), 0)
         }
         /**
@@ -82,7 +76,7 @@ class AdminController {
     @PostMapping("deleteArticle")
     fun deleteArticle(@RequestBody body: Map<String, Any>): Any {
         if (body.containsKey("id")) {
-            var id = body.get("id") as Int
+            val id = body["id"] as Int
             blogService.removeById(id)
         }
         return ResultUtils.success("OK", 0)

@@ -18,12 +18,17 @@ configurations {
         extendsFrom(configurations.annotationProcessor.get())
     }
 }
+tasks.bootJar<org.springframework.boot.gradle.tasks.bundling.BootJar>{
+    duplicatesStrategy=DuplicatesStrategy.EXCLUDE
+}
 
 repositories {
     mavenCentral()
 }
 
 dependencies {
+
+
     implementation("com.baomidou:mybatis-plus-generator:3.5.1")
     implementation("org.freemarker:freemarker:2.3.31")
     implementation("org.springframework.boot:spring-boot-starter-jdbc")
@@ -37,6 +42,7 @@ dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+
 }
 
 tasks.withType<KotlinCompile> {
