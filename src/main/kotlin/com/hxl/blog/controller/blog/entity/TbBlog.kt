@@ -4,12 +4,6 @@ import com.baomidou.mybatisplus.annotation.TableId
 import com.baomidou.mybatisplus.annotation.IdType
 import com.baomidou.mybatisplus.annotation.TableField
 import com.baomidou.mybatisplus.annotation.TableName
-import com.fasterxml.jackson.annotation.JsonFormat
-import org.springframework.data.elasticsearch.annotations.CompletionField
-import org.springframework.data.elasticsearch.annotations.Document
-import org.springframework.data.elasticsearch.annotations.Field
-import org.springframework.data.elasticsearch.annotations.FieldType
-import org.springframework.data.elasticsearch.core.completion.Completion
 import java.io.Serializable
 import java.time.LocalDateTime
 
@@ -22,7 +16,6 @@ import java.time.LocalDateTime
  * @author hxl
  * @since 2021-10-22
  */
-@Document(indexName = "tb_blog")
 @TableName("tb_blog")
 class TbBlog : Serializable {
     @TableId(value = "id", type = IdType.AUTO)
@@ -47,7 +40,6 @@ class TbBlog : Serializable {
      */
     var createDate: LocalDateTime? = null
 
-    @Field(type = FieldType.Keyword)
     var classifyId: String? = null
 
     /**

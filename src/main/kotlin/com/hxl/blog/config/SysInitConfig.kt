@@ -8,12 +8,15 @@ import java.nio.file.Files
 import java.nio.file.Paths
 
 @Configuration
-class SysInitConfig:CommandLineRunner {
+class SysInitConfig : CommandLineRunner {
     override fun run(vararg args: String?) {
-        val av = Paths.get(WebConfig.STATIC_PATH, "av")
-        val avBytes = ClassPathResource("/static/av").inputStream.readBytes()
-        if (Files.notExists(av)){
-            Files.write(av,avBytes)
-        }
+        unzip("av")
+        unzip("bck")
+    }
+
+    fun unzip(name: String) {
+        val av = Paths.get(WebConfig.STATIC_PATH, name)
+        val avBytes = ClassPathResource("/static/${name}").inputStream.readBytes()
+        if (Files.notExists(av)) Files.write(av, avBytes)
     }
 }

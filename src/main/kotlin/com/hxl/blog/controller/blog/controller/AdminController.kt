@@ -13,9 +13,9 @@ import com.hxl.blog.controller.ip.entity.TbIp
 import com.hxl.blog.controller.ip.service.ITbIpService
 import com.hxl.blog.controller.sys.entity.TbSysConfig
 import com.hxl.blog.controller.sys.service.ITbSysConfigService
-import com.hxl.blog.es.EsBlogRepository
 import com.hxl.blog.utils.BuilderMap
 import com.hxl.blog.utils.ResultUtils
+import com.hxl.blog.utils.joinLine
 import com.hxl.blog.vo.LoginVO
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.bind.annotation.*
@@ -125,11 +125,15 @@ class AdminController {
     }
 
     @PostMapping("configInfo")
-    fun configInfo(@RequestParam(value = "img", required = false) multipartFile: MultipartFile?,
-                   @RequestParam(value = "title" )title:String):String{
-        if (title.isEmpty()) return "无效网名"
-        sysConfig.update(UpdateWrapper<TbSysConfig>().set("sys_value", title).eq("sys_key", SysKeyEnum.SYS_BLOG_TITLE))
-        multipartFile?.transferTo(Paths.get(WebConfig.STATIC_PATH,"av"))
+    fun configInfo(@RequestParam(value = "userAvatar", required = false) userAvatar: MultipartFile?,
+                   @RequestParam(value = "background", required = false) background: MultipartFile?,
+                   @RequestParam map: Map<String, Any>):String{
+        if (map.values.find { it.toString().isEmpty() }!=null) return  "无效参数"
+        map.forEach { (key, value) ->
+            sysConfig.update(UpdateWrapper<TbSysConfig>().set("sys_value", value).eq("sys_key", key.joinLine()))
+        }
+        userAvatar?.transferTo(Paths.get(WebConfig.STATIC_PATH,"av"))
+        background?.transferTo(Paths.get(WebConfig.STATIC_PATH,"bck"))
         return "保存成功"
     }
 

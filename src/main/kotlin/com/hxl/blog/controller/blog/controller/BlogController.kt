@@ -32,13 +32,13 @@ import javax.servlet.http.HttpServletRequest
 @RestController()
 class BlogController {
     @Autowired
-    lateinit var blogService: ITbBlogService;
-
+    lateinit var blogService: ITbBlogService
 
     @Autowired
-    lateinit var ipService: ITbIpService;
+    lateinit var ipService: ITbIpService
+
     @Autowired
-    lateinit var sysConfig: ITbSysConfigService;
+    lateinit var sysConfig: ITbSysConfigService
     @GetMapping("getContent")
     fun getContent(@RequestParam("id") blogId: Int): Any {
         return LocalDateTime.now()
@@ -48,17 +48,13 @@ class BlogController {
      * 博客列表
      */
     @GetMapping("list")
-    fun list(
-        @RequestParam("page") page: Int,
-        @RequestParam(value = "type", defaultValue = "") type: String, request: HttpServletRequest
-    ): Any {
+    fun list(@RequestParam("page") page: Int, @RequestParam(value = "type", defaultValue = "") type: String, request: HttpServletRequest): Any {
         request.getHeader("x-real-ip")?.run { ipService.addIpRecord(this) }
         val queryWrapper = QueryWrapper<TbBlog>().orderByDesc("id");
 
         if ("" != type) queryWrapper.eq("classify_id", type)
         queryWrapper.select(TbBlog::class.java) { t -> t.column != "markdown_content" }
-        val list =
-            blogService.page(PageDTO(page.toLong(), MybatisConfig.PAGE_MAX_SIZE), queryWrapper)
+        val list = blogService.page(PageDTO(page.toLong(), MybatisConfig.PAGE_MAX_SIZE), queryWrapper)
         return ResultUtils.success(list, 0)
     }
 
