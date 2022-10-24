@@ -25,8 +25,6 @@ class TbClassifyController {
 
     @GetMapping("listClassify")
     fun getClassify(): Any {
-        val  list = classifyService.list()
-
-        return list
+        return ResultUtils.success(classifyService.list(),0)
     }
 }

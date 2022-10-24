@@ -14,4 +14,5 @@ import com.hxl.blog.controller.blog.entity.TbBlog
  */
 interface ITbBlogService : IService<TbBlog?> {
      fun listArticleCountByType(): Map<String,Long>
+    fun getCityTop(): Map<String,Int>
 }

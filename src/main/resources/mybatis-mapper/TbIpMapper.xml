@@ -2,4 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.hxl.blog.controller.ip.mapper.TbIpMapper">
 
+    <select id="getCityTop" resultType="java.util.Map">
+        select  ip_province  ,count(id) as c  from tb_ip  where ip_province &lt;&gt;  &quot;&quot;  group by ip_province   order by count(id) desc   limit 10
+    </select>
 </mapper>

@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.*
 import org.springframework.web.multipart.MultipartFile
 import java.nio.file.Paths
 import java.time.LocalDateTime
+import java.util.UUID
 import javax.servlet.http.HttpServletResponse
 import javax.servlet.http.HttpSession
 
@@ -142,18 +143,14 @@ class AdminController {
      */
     @GetMapping("dashboard")
     fun dashboard(): Any {
-        return ResultUtils.success(
-            BuilderMap()
-                .put("article_num", blogService.listArticleCountByType())
-                .put("total_visit", ipService.count())
-                .put("blog_count", blogService.count())
-                .put(
-                    "today_count", ipService.count(
-                        QueryWrapper<TbIp?>()
-                            .apply("DATE_FORMAT(create_date,'%Y-%m-%d')=CURDATE()")
-                    )
-                ), 0
-        )
+        val result = BuilderMap()
+            .put("article_num", blogService.listArticleCountByType())
+            .put("total_visit", ipService.count())
+            .put("blog_count", blogService.count())
+            .put("city_top",blogService.getCityTop())
+            .put("today_count", ipService.count(QueryWrapper<TbIp?>().apply("DATE_FORMAT(create_date,'%Y-%m-%d')=CURDATE()")))
+        return ResultUtils.success(result,0)
+
     }
 
     /**
@@ -169,8 +166,13 @@ class AdminController {
      */
     @PostMapping("removeClassify")
     fun removeClassify(@RequestBody classify: TbClassify): Any {
-        return ResultUtils.success(
-            classifyService.remove(QueryWrapper<TbClassify>().eq("classify", classify.classify)), 0
-        );
+        return ResultUtils.success(classifyService.remove(QueryWrapper<TbClassify>().eq("classify", classify.classify)), 0);
+    }
+
+    @PutMapping("img")
+    fun putImage(@RequestParam("img") multipartFile: MultipartFile):String{
+        val name = UUID.randomUUID().toString()
+        multipartFile.transferTo(Paths.get(WebConfig.STATIC_PATH,name))
+        return name
     }
 }

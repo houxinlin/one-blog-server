@@ -23,4 +23,5 @@ import org.springframework.web.bind.annotation.RequestMapping
 @Mapper
 interface TbIpMapper : BaseMapper<TbIp?>{
 
+    fun getCityTop():List<Map<String,String>>
 }

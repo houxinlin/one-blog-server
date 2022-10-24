@@ -1,6 +1,7 @@
 HELP.md
 .gradle
 build/
+one-blog-static
 !gradle/wrapper/gradle-wrapper.jar
 !**/src/main/**/build/
 !**/src/test/**/build/
