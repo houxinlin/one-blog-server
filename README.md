@@ -15,13 +15,11 @@ spring.datasource.password=12345678
 ```
 3. 在数据库中导入src/main/resources/sql/db_blog.sql
 
-4. 安装elasticsearch
-
-5. 打包
+4. 打包
 ```java
 ./gradlew  bootJar 
 ```
-6. 运行
+5. 运行
 ```java
 nohup java -jar OneBlog.jar & 
 ```
