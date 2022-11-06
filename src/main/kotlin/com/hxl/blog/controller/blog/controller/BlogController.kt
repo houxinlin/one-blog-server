@@ -48,12 +48,28 @@ class BlogController {
      * 博客列表
      */
     @GetMapping("list")
-    fun list(@RequestParam("page") page: Int, @RequestParam(value = "type", defaultValue = "") type: String, request: HttpServletRequest): Any {
+    fun list(@RequestParam("page") page: Int,
+             @RequestParam(value = "type", defaultValue = "") type: String,
+             @RequestParam(value = "orderBy", defaultValue = "") orderBy: String,
+             request: HttpServletRequest): Any {
+        //添加ip记录
         request.getHeader("x-real-ip")?.run { ipService.addIpRecord(this) }
-        val queryWrapper = QueryWrapper<TbBlog>().orderByDesc("id");
-
+        val queryWrapper = QueryWrapper<TbBlog>()
+        //指定分类
         if ("" != type) queryWrapper.eq("classify_id", type)
+        //浏览量
+        if(""!=orderBy) {
+            if ("asc".equals(orderBy,ignoreCase = false)){
+                queryWrapper.orderByAsc("watch_count")
+            }else{
+                queryWrapper.orderByDesc("watch_count")
+            }
+        }
+        //id降序
+        queryWrapper.orderByDesc("id")
+        //排除markdown内容
         queryWrapper.select(TbBlog::class.java) { t -> t.column != "markdown_content" }
+        //分页查询
         val list = blogService.page(PageDTO(page.toLong(), MybatisConfig.PAGE_MAX_SIZE), queryWrapper)
         return ResultUtils.success(list, 0)
     }
