@@ -11,8 +11,8 @@ import javax.servlet.http.HttpServletResponse
 @WebFilter(urlPatterns = ["*"])
 class WebFilter:Filter {
     override fun doFilter(request: ServletRequest?, response: ServletResponse?, chain: FilterChain?) {
-        var servletRequest=request as HttpServletRequest;
-        var servletResponse=(response as HttpServletResponse)
+        var servletRequest=request as HttpServletRequest
+        val servletResponse=(response as HttpServletResponse)
         servletResponse.addHeader("Access-Control-Allow-Headers","x-requested-with,content-type")
         servletResponse.addHeader("Access-Control-Allow-Methods","GET,POST,PUT,POST")
         servletResponse.addHeader("Access-Control-Allow-Origin",request.getHeader("Origin"))

@@ -8,7 +8,7 @@ import javax.servlet.http.HttpServletResponse
 
 class AuthInterceptor : HandlerInterceptor {
     override fun preHandle(request: HttpServletRequest, response: HttpServletResponse, handler: Any): Boolean {
-        var login = request.session.getAttribute("login")
+        val login = request.session.getAttribute("login")
         if (login == null || login == false) {
             response.contentType="text/paint;charset=UTF-8"
             response.writer.append(createResponseBody())
@@ -19,7 +19,7 @@ class AuthInterceptor : HandlerInterceptor {
     }
 
     private fun createResponseBody(): String {
-        var objectMapper = ObjectMapper()
+        val objectMapper = ObjectMapper()
         return objectMapper.writeValueAsString(ResultUtils.success("未登陆", -1000))
     }
 }

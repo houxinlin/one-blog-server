@@ -88,12 +88,8 @@ class AdminController {
      */
     @GetMapping("getBrowseRecord")
     fun getBrowseRecord(@RequestParam(required = false, value = "page") page: Int): Any {
-        return ResultUtils.success(
-            ipService.page(
-                Page(page.toLong(), 50),
-                QueryWrapper<TbIp?>().orderByDesc("id")
-            ), 0
-        )
+        val result =   ipService.page(Page(page.toLong(), 50), QueryWrapper<TbIp?>().orderByDesc("id"))
+        return ResultUtils.success(result, 0)
     }
 
     /**
@@ -110,11 +106,7 @@ class AdminController {
     @PostMapping("setSysConfig")
     fun setSysConfig(@RequestBody map: Map<String, Any>): Any {
         map.forEach { (k, v) ->
-            sysConfig.update(
-                UpdateWrapper<TbSysConfig>()
-                    .set("sys_value", v)
-                    .eq("sys_key", k)
-            )
+            sysConfig.update(UpdateWrapper<TbSysConfig>().set("sys_value", v).eq("sys_key", k))
         }
         return ResultUtils.success("OK", 0)
     }
