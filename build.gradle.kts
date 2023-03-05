@@ -24,11 +24,12 @@ tasks.bootJar<org.springframework.boot.gradle.tasks.bundling.BootJar>{
 }
 
 repositories {
+    maven { url =uri ("https://maven.aliyun.com/repository/public/") }
+
     mavenCentral()
 }
 
 dependencies {
-
 
     implementation("com.baomidou:mybatis-plus-generator:3.5.1")
     implementation("org.freemarker:freemarker:2.3.31")
@@ -43,6 +44,10 @@ dependencies {
     annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
     providedRuntime("org.springframework.boot:spring-boot-starter-tomcat")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+    implementation("com.fasterxml.jackson.datatype:jackson-datatype-jsr310:2.14.2")
+
+    implementation(files("/home/LinuxWork/project/java/scheduled-invoke-starter/scheduled-invoke-starter/build/libs/scheduled-invoke-starter-0.0.1-SNAPSHOT-plain.jar"))
 
 }
 

@@ -1,5 +1,26 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.hxl.blog.controller.blog.mapper.TbBlogMapper">
+<mapper namespace="com.hxl.blog.mapper.TbBlogMapper">
 
+    <resultMap id="softwareMap" type="com.hxl.blog.entity.SoftwareType">
+
+        <id property="id" column="id" />
+        <result property="typeName" column="type_name" />
+
+        <collection property="softwareList" ofType="com.hxl.blog.entity.Software">
+            <id property="id" column="id" />
+            <result property="softwareName" column="software_name" />
+            <result property="softwareDescribe" column="software_describe" />
+            <result property="developerDate" column="developer_date" />
+            <result property="githubUrl" column="github_url" />
+            <result property="binUrl" column="bin_url" />
+            <result property="softwareDate" column="software_date" />
+
+        </collection>
+
+    </resultMap>
+
+    <select id="listSoftware" resultMap="softwareMap">
+        select  * from tb_software_type tst inner join tb_software ts  on tst.id  =ts.id
+    </select>
 </mapper>
