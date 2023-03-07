@@ -14,7 +14,7 @@
             <result property="githubUrl" column="github_url" />
             <result property="binUrl" column="bin_url" />
             <result property="softwareDate" column="software_date" />
-
+            <result property="gifPath" column="gif_path" />
         </collection>
 
     </resultMap>

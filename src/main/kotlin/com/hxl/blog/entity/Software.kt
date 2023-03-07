@@ -12,4 +12,5 @@ class Software {
     var binUrl:String=""
     var softwareTypeId:Int=0
     var softwareDate:LocalDate ?= null
+    var gifPath:String =""
 }
