@@ -61,7 +61,12 @@ class TbBlogServiceImpl : ServiceImpl<TbBlogMapper?, TbBlog?>(), ITbBlogService 
         return result
     }
 
-    override fun listSoftware(): MutableMap<String, List<Software>> {
-        return blogMapper.listSoftware().stream().collect(Collectors.toMap({ it.typeName }, { it.softwareList!! }))
+    override fun listSoftware(): MutableMap<String, MutableList<Software>> {
+        val result  = mutableMapOf<String, MutableList<Software>>()
+        var collect = blogMapper.listSoftware().stream().forEach {
+            val computeIfAbsent = result.computeIfAbsent(it.typeName) { mutableListOf<Software>() }
+            it.softwareList?.run { computeIfAbsent.addAll(this) }
+        }
+        return  result
     }
 }

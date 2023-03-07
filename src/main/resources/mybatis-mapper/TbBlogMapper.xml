@@ -8,7 +8,6 @@
         <result property="typeName" column="type_name" />
 
         <collection property="softwareList" ofType="com.hxl.blog.entity.Software">
-            <id property="id" column="id" />
             <result property="softwareName" column="software_name" />
             <result property="softwareDescribe" column="software_describe" />
             <result property="developerDate" column="developer_date" />
@@ -21,6 +20,6 @@
     </resultMap>
 
     <select id="listSoftware" resultMap="softwareMap">
-        select  * from tb_software_type tst inner join tb_software ts  on tst.id  =ts.id
+        select  * from tb_software ts  left join  tb_software_type tst  on ts.software_type_id  =tst.id
     </select>
 </mapper>

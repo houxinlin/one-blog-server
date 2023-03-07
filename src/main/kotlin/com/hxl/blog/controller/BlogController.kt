@@ -115,9 +115,4 @@ class BlogController {
     fun listSoftware(): Map<String, List<Software>> {
         return blogService.listSoftware()
     }
-
-    @GetMapping("test")
-    fun test():LocalDate{
-        return LocalDate.now()
-    }
 }
